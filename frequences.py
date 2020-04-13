@@ -19,7 +19,7 @@ path_name=os.path.abspath(pathname)
 s='Name'
 fname=os.path.join(path_name+ '/'+s+'_freq1.txt' )
 my_file = Path(fname)
-key='research'
+key='keyword_1'
    
 
 def create_lst(fname, key, sector):
@@ -29,34 +29,27 @@ def create_lst(fname, key, sector):
     #print(list_with_text)
     url, research, development, innovation, design, extra_info = ([] for i in range(0,6))
     #print(list_with_text[0])
-    for i in range(0,len(list_with_text),11): #url
+    for link in range(0,len(list_with_text),11): #url
         #print(list_with_text[i])
-        url.append(list_with_text[i])
+        url.append(list_with_text[link])
         dump_list=[]
-        for j in range(i+2,i+11,2):
-            #print('j : '+str(j))
-            lst=list_with_text[j].strip('][').split(', ') 
-            #print(lst[0])
-            #instead of print I want it to be in an excel file!
+        for info in range(link+2,link+11,2):
+            lst=list_with_text[info].strip('][').split(', ') 
             dump_list.append(lst[0])    
         research.append(dump_list[0])
         development.append(dump_list[1])
         innovation.append(dump_list[2])
         design.append(dump_list[3])
         #extra text
-        extra=list_with_text[i+10]
-        #print('Extra : '+ str(type(extra)))
+        extra=list_with_text[link+10]
         if extra=="[]":
             extra_info.append('')
-            #print('---------------------------------------')
         else:
-            x=extra
-            x=x.replace('\\u3000',' ').replace('\\u200b', ' ').replace('\\xa0', ' ').replace("\\u2028",' ').replace('\\xad', ' ').replace('\\u00ad', ' ')
-            x=x.replace("  "," ").replace("\\n","").replace("\\r","").replace("\\t","")
+            extra=extra.replace('\\u3000',' ').replace('\\u200b', ' ').replace('\\xa0', ' ').replace("\\u2028",' ').replace('\\xad', ' ').replace('\\u00ad', ' ')
+            extra=extra.replace("  "," ").replace("\\n","").replace("\\r","").replace("\\t","")
             extra_info.append(x)
-            #extra_info=list_with_text[i+10]
         
-    # extract company name
+    # extract name from url
     company=[url[i].split('/')[2].split('.') for i in range(0,len(url))]
     company=['.'.join(company[i]) for i in range(0,len(company))]
     #keyword
@@ -73,12 +66,12 @@ if my_file.exists():
 else:
     company, sector, key_list, url, research, development, innovation, design, extra_info=  ([] for i in range(0,9))
 
-#second file .txt
+#use the second file .txt (if there is one)
 
 pathname = os.path.dirname(sys.argv[0]) 
 path_name=os.path.abspath(pathname)
 fname=os.path.join(path_name+ '/'+s+'_freq2.txt' )
-key='innovation'
+key='keyword_2'
 my_file = Path(fname)
 if my_file.exists():
     text=open(fname, 'r+',  encoding='utf-8')    
@@ -106,8 +99,6 @@ df['Development']=development
 df['Innovation']=innovation  
 df['Research']=research 
 df['Extra']=extra_info
-
-
 
 
 # write to output
