@@ -16,26 +16,27 @@ from pathlib import Path
 
 pathname = os.path.dirname(sys.argv[0]) 
 path_name=os.path.abspath(pathname)
-s='Agriculture'
-fname=os.path.join(path_name+ '/'+s+'_research_freq.txt' )
+s='Name'
+fname=os.path.join(path_name+ '/'+s+'_freq1.txt' )
 my_file = Path(fname)
 key='research'
    
 
-
 def create_lst(fname, key, sector):
-    text=open(fname, 'r+',  encoding='utf-8')
+    text=open(fname, 'r+') #encoding='utf-8'   
     list_with_text = text.read().splitlines()
+    #print(type(list_with_text[2]))
+    #print(list_with_text)
     url, research, development, innovation, design, extra_info = ([] for i in range(0,6))
     #print(list_with_text[0])
     for i in range(0,len(list_with_text),11): #url
-        print(list_with_text[i])
+        #print(list_with_text[i])
         url.append(list_with_text[i])
         dump_list=[]
         for j in range(i+2,i+11,2):
-            print('j : '+str(j))
+            #print('j : '+str(j))
             lst=list_with_text[j].strip('][').split(', ') 
-            print(lst[0])
+            #print(lst[0])
             #instead of print I want it to be in an excel file!
             dump_list.append(lst[0])    
         research.append(dump_list[0])
@@ -47,10 +48,11 @@ def create_lst(fname, key, sector):
         #print('Extra : '+ str(type(extra)))
         if extra=="[]":
             extra_info.append('')
+            #print('---------------------------------------')
         else:
-            x=" ".join(str(x) for x in extra)
+            x=extra
             x=x.replace('\\u3000',' ').replace('\\u200b', ' ').replace('\\xa0', ' ').replace("\\u2028",' ').replace('\\xad', ' ').replace('\\u00ad', ' ')
-            x=x.replace("  "," ").replace("\n","").replace("\r","").replace("\t","")
+            x=x.replace("  "," ").replace("\\n","").replace("\\r","").replace("\\t","")
             extra_info.append(x)
             #extra_info=list_with_text[i+10]
         
@@ -75,7 +77,7 @@ else:
 
 pathname = os.path.dirname(sys.argv[0]) 
 path_name=os.path.abspath(pathname)
-fname=os.path.join(path_name+ '/'+s+'_innovation_freq.txt' )
+fname=os.path.join(path_name+ '/'+s+'_freq2.txt' )
 key='innovation'
 my_file = Path(fname)
 if my_file.exists():
@@ -92,8 +94,6 @@ if my_file.exists():
     innovation+=innovation2
     design+=design2
     extra_info+=extra_info2
-
-
 
 
 # Construct dataframe
